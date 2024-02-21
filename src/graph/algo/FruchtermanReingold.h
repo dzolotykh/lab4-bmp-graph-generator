@@ -8,15 +8,16 @@
 class FruchtermanReingold {
 public:
     FruchtermanReingold(const Graph& g, double k = 15.0);
-    void operator()(std::vector<Point2D>& positions);
+    void run(std::vector<Point2D>& positions) noexcept;
 
 private:
     const Graph& g_;
     const double k_;
-    const double k_squared_;
     double temp_;
-    std::vector<std::pair<Graph::vertexT, Graph::vertexT>> edges_;
-    std::vector<Vector2D> mvmts_;
+    std::vector<Vector2D> move_to;
+
+    double fa(double x) const noexcept;
+    double fr(double x) const noexcept;
 };
 
 

@@ -1,76 +1,44 @@
 #include "FruchtermanReingold.h"
-#include "../../math/Point2D.h"
-#include "../../math/Vector2D.h"
-
 
 FruchtermanReingold::FruchtermanReingold(const Graph &g, double k) : g_(g)
         , k_(k)
-        , k_squared_(k * k)
-        , temp_(10 * sqrt(g.size()))
-        , mvmts_(g_.size()) {}
+        , temp_(g.size())
+        , move_to(g_.size()) {}
 
-void FruchtermanReingold::operator()(std::vector<Point2D>& positions) {
-    Vector2D zero(0.0, 0.0);
-    fill(mvmts_.begin(), mvmts_.end(), zero);
+double FruchtermanReingold::fa(double x) const noexcept {
+    return x * x / k_;
+}
 
-    // Repulsion force between vertice pairs
-    for (Graph::vertexT v_id = 0; v_id < g_.size(); v_id++) {
-        for (Graph::vertexT other_id = v_id + 1; other_id < g_.size(); other_id++) {
-            if (v_id == other_id) {
-                continue;
-            }
+double FruchtermanReingold::fr(double x) const noexcept {
+    return k_ * k_ / x;
+}
 
-            Vector2D delta = positions[v_id] - positions[other_id];
-            double distance = delta.size();
-            // TODO: handle distance == 0.0
+void FruchtermanReingold::run(std::vector<Point2D> &positions) noexcept {
+    fill(move_to.begin(), move_to.end(), Vector2D(0, 0));
 
-            // > 1000.0: not worth computing
-            if (distance > 1000.0) {
-                continue;
-            }
-
-            double repulsion = k_squared_ / distance;
-
-            mvmts_[v_id] += delta / distance * repulsion;
-            mvmts_[other_id] -= delta / distance * repulsion;
-        }
-
-        // Attraction force between edges
-        for (Graph::vertexT adj_id : g_.get_neighbours(v_id)) {
-            if (adj_id > v_id) {
-                continue;
-            }
-
-            Vector2D delta = positions[v_id] - positions[adj_id];
-            double distance = delta.size();
-            if (distance == 0.0) {
-                continue;
-            }
-
-            double attraction = distance * distance / k_;
-
-            mvmts_[v_id] -= delta / distance * attraction;
-            mvmts_[adj_id] += delta / distance * attraction;
+    for (Graph::vertexT v = 0; v < g_.size(); ++v) {
+        for (Graph::vertexT u = v + 1; u < g_.size(); ++u) {
+            auto delta = positions[v] - positions[u];
+            move_to[v] += (delta * fr(delta.size()) / delta.size());
+            move_to[u] -= (delta * fr(delta.size()) / delta.size());
         }
     }
 
-    // Max movement capped by current temperature
-    for (Graph::vertexT v_id = 0; v_id < g_.size(); v_id++) {
-        double mvmt_norm = mvmts_[v_id].size();
-        // < 1.0: not worth computing
-        if (mvmt_norm < 1.0) {
-            continue;
+    for (Graph::vertexT v = 0; v < g_.size(); ++v) {
+        for (Graph::vertexT u : g_.get_neighbours(v)) {
+            if (u > v) continue;
+            auto delta = positions[v] - positions[u];
+            move_to[v] -= (delta * fa(delta.size()) / delta.size());
+            move_to[u] += (delta * fa(delta.size()) / delta.size());
         }
-        double capped_mvmt_norm = std::min(mvmt_norm, temp_);
-        Vector2D capped_mvmt = mvmts_[v_id] / mvmt_norm * capped_mvmt_norm;
-
-        positions[v_id] += capped_mvmt;
     }
 
-    // Cool down fast until we reach 1.5, then stay at low temperature
-    if (temp_ > 1.5) {
-        temp_ *= 0.85;
-    } else {
-        temp_ = 1.5;
+    for (Graph::vertexT v = 0; v < g_.size(); ++v) {
+        positions[v] += (move_to[v] * std::min(temp_, move_to[v].size()) / move_to[v].size());
+    }
+
+    temp_ *= 0.99;
+    if (temp_ < 0.001) {
+        temp_ = 0.001;
     }
 }
