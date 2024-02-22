@@ -1,4 +1,5 @@
-#include "Vector2D.h"
+#include "structures.h"
+#include <cmath>
 
 Vector2D operator+(const Vector2D &l, const Vector2D &r) noexcept {
     return Vector2D(l.x + r.x, l.y + r.y);
@@ -63,4 +64,36 @@ Vector2D& Vector2D::operator/=(double scalar) noexcept {
 
 double Vector2D::size() const noexcept {
     return std::sqrt(x * x + y * y);
+}
+
+Point2D operator+(const Point2D &l, const Vector2D &s) noexcept {
+    return Point2D(l.x + s.x, l.y + s.y);
+}
+
+Point2D operator-(const Point2D &l, const Vector2D &s) noexcept {
+    return Point2D(l.x - s.x, l.y - s.y);
+}
+
+Vector2D operator-(const Point2D &l, const Point2D &s) noexcept {
+    return Vector2D(l.x - s.x, l.y - s.y);
+}
+
+Point2D::operator Vector2D() const noexcept {
+    return Vector2D(x, y);
+}
+
+Point2D& Point2D::operator+=(const Vector2D &other) noexcept {
+    x += other.x;
+    y += other.y;
+    return *this;
+}
+
+Point2D& Point2D::operator-=(const Vector2D &other) noexcept {
+    x -= other.x;
+    y -= other.y;
+    return *this;
+}
+
+Vector2D::operator Point2D() const noexcept {
+    return Point2D(x, y);
 }
