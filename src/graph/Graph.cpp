@@ -1,8 +1,9 @@
 #include "Graph.h"
-#include <iostream>
 #include <fstream>
+#include <iostream>
 
-Graph::Graph(const std::string &path) {
+// construct graph from provided file. Throws exception if it could not open the file
+Graph::Graph(const std::string& path) {
     std::ifstream fs(path);
     if (!fs.is_open()) {
         throw std::runtime_error("Cannot open the file " + path);
@@ -18,7 +19,8 @@ Graph::Graph(const std::string &path) {
     }
 }
 
-const std::vector<Graph::vertexT> &Graph::get_neighbours(Graph::vertexT vertex_num) const noexcept {
+// returns vector with vertices that are adjacent to the specified one
+const std::vector<Graph::vertexT>& Graph::get_neighbours(Graph::vertexT vertex_num) const noexcept {
     return g_[vertex_num];
 }
 
