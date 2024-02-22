@@ -17,5 +17,50 @@ Vector2D operator*(double scalar, const Vector2D &r) noexcept {
 }
 
 Vector2D operator/(const Vector2D &l, double scalar) noexcept {
+    if (scalar == 0) {
+        double _x = std::numeric_limits<double>::max();
+        if (l.x < 0) _x *= -1;
+        double _y = std::numeric_limits<double>::max();
+        if (l.y < 0) _y *= -1;
+        return Vector2D(_x, _y);
+    }
+
     return Vector2D(l.x / scalar, l.y / scalar);
+}
+
+Vector2D& Vector2D::operator+=(const Vector2D &other) noexcept {
+    x += other.x;
+    y += other.y;
+    return *this;
+}
+
+Vector2D& Vector2D::operator-=(const Vector2D &other) noexcept {
+    x -= other.x;
+    y -= other.y;
+    return *this;
+}
+
+Vector2D& Vector2D::operator*=(double scalar) noexcept {
+    x *= scalar;
+    y *= scalar;
+    return *this;
+}
+
+Vector2D& Vector2D::operator/=(double scalar) noexcept {
+    if (scalar == 0) {
+        double _x = std::numeric_limits<double>::max();
+        if (x < 0) _x *= -1;
+        double _y = std::numeric_limits<double>::max();
+        if (y < 0) _y *= -1;
+        x = _x;
+        y = _y;
+    } else {
+        x /= scalar;
+        y /= scalar;
+    }
+    return *this;
+}
+
+double Vector2D::size() const noexcept {
+    return std::sqrt(x * x + y * y);
 }
