@@ -1,4 +1,5 @@
 #include "BMP.h"
+#include "DigitsDrawer.h"
 
 BMP::BMP(size_t _width, size_t _height)
     : width(_width), height(_height), pixels(_width * _height * 3) {
@@ -90,5 +91,24 @@ void BMP::draw_circle(int x1, int y1, int r) noexcept {
                 draw_pixel(x, y);
             }
         }
+    }
+}
+
+void BMP::draw_number(size_t x, size_t y, int number) {
+    std::vector<int> digits;
+    if (number == 0) {
+        digits.push_back(0);
+    }
+    while (number) {
+        digits.push_back(number % 10);
+        number /= 10;
+    }
+    std::reverse(digits.begin(), digits.end());
+    size_t add = 0;
+    for (auto digit : digits) {
+        DigitsDrawer::draw_digit(x, y + add, digit, [this](size_t x, size_t y) {
+            draw_pixel(x, y);
+        });
+        add += 10;
     }
 }

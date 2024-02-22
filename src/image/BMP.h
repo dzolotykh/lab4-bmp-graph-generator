@@ -20,6 +20,8 @@ class BMP {
 
     void draw_segment(int x1, int y1, int x2, int y2) noexcept;
 
+    void draw_number(size_t x, size_t y, int number);
+
    private:
     std::vector<uint8_t> pixels;
     const size_t width, height;
