@@ -74,16 +74,8 @@ bool parse_arguments(int argc, char* argv[], std::string& input, std::string& ou
 void draw_graph(const std::string& path, const std::vector<Point2D>& positions, const Graph& g,
                 size_t width, size_t height) {
     BMP image(width, height);  // create image
-    int cnt = 0;               // for getting number of current vertex
     for (auto i : positions) {
         image.draw_circle(static_cast<int>(i.x), static_cast<int>(i.y), 10);  // draws vertex
-
-        // draw number of vertex width more than 1 pixel
-        image.draw_number(static_cast<int>(i.x) + 15, static_cast<int>(i.y), cnt);
-        image.draw_number(static_cast<int>(i.x) + 15, static_cast<int>(i.y) + 1, cnt);
-        image.draw_number(static_cast<int>(i.x) + 16, static_cast<int>(i.y), cnt);
-
-        ++cnt;
     }
 
     // draw edges
@@ -94,6 +86,14 @@ void draw_graph(const std::string& path, const std::vector<Point2D>& positions, 
             image.draw_segment(static_cast<int>(positions[i].x), static_cast<int>(positions[i].y),
                                static_cast<int>(positions[j].x), static_cast<int>(positions[j].y));
         }
+    }
+
+    // draw number of vertex width more than 1 pixel
+    for (Graph::vertexT v = 0; v < g.size(); ++v) {
+        auto i = positions[v];
+        image.draw_number(static_cast<int>(i.x) + 15, static_cast<int>(i.y), v);
+        image.draw_number(static_cast<int>(i.x) + 15, static_cast<int>(i.y) + 1, v);
+        image.draw_number(static_cast<int>(i.x) + 16, static_cast<int>(i.y), v);
     }
     image.save(path);
 }
