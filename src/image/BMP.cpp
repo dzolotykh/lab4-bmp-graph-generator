@@ -1,4 +1,5 @@
 #include "BMP.h"
+#include <algorithm>
 #include "DigitsDrawer.h"
 
 BMP::BMP(size_t _width, size_t _height)

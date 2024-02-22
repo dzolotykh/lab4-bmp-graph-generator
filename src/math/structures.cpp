@@ -1,5 +1,6 @@
 #include "structures.h"
 #include <cmath>
+#include <limits>
 
 Vector2D operator+(const Vector2D& l, const Vector2D& r) noexcept {
     return Vector2D(l.x + r.x, l.y + r.y);

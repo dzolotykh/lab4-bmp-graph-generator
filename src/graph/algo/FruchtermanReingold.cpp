@@ -1,4 +1,6 @@
 #include "FruchtermanReingold.h"
+#include <cmath>
+#include <limits>
 
 FruchtermanReingold::FruchtermanReingold(const Graph& g, size_t width, size_t height, double k)
     : g_(g),

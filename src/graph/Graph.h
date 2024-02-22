@@ -1,6 +1,8 @@
 #ifndef GRAPH_H
 #define GRAPH_H
 
+#include <cstddef>
+#include <string>
 #include <vector>
 
 // simple wrapper for graph structure
