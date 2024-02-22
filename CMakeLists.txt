@@ -15,4 +15,5 @@ add_executable(lab4_bmp_graph_generator src/main.cpp
         src/math/Vector2D.h
         src/math/Point2D.cpp
         src/math/Vector2D.cpp
+        src/image/DigitsDrawer.h
 )
