@@ -6,6 +6,7 @@ BMP::BMP(size_t _width, size_t _height)
     std::fill(pixels.begin(), pixels.end(), 255);
 }
 
+// saves image in specified path
 void BMP::save(const std::string& path) const noexcept {
     std::ofstream outputFile(path, std::ios::binary);
     for (auto i : Header(width, height).get_bytes()) {
@@ -15,6 +16,7 @@ void BMP::save(const std::string& path) const noexcept {
     outputFile.close();
 };
 
+// sets pixel in point (x, y) in color (r, g, b)
 void BMP::draw_pixel(size_t x, size_t y, u_char r, u_char g, u_char b) noexcept {
     if (get_pos(x, y) + 2 >= pixels.size())
         return;
@@ -23,6 +25,7 @@ void BMP::draw_pixel(size_t x, size_t y, u_char r, u_char g, u_char b) noexcept 
     pixels[get_pos(x, y) + 2] = b;
 }
 
+// draws black segment from (x1, y1) to (x2, y2)
 void BMP::draw_segment(int x1, int y1, int x2, int y2) noexcept {
     int x, y, dx, dy, dx1, dy1, px, py, xe, ye, i;
     dx = x2 - x1;
@@ -84,16 +87,18 @@ void BMP::draw_segment(int x1, int y1, int x2, int y2) noexcept {
     }
 }
 
-void BMP::draw_circle(int x1, int y1, int r) noexcept {
-    for (int x = x1 - r; x <= x1 + r; x++) {
-        for (int y = y1 - r; y <= y1 + r; y++) {
-            if ((x1 - x) * (x1 - x) + (y1 - y) * (y1 - y) < r * r) {
-                draw_pixel(x, y);
+// draws black filled circle in point (x, y) with radius r
+void BMP::draw_circle(int x, int y, int r) noexcept {
+    for (int x_i = x - r; x_i <= x + r; x_i++) {
+        for (int y_i = y - r; y_i <= y + r; y_i++) {
+            if ((x - x_i) * (x - x_i) + (y - y_i) * (y - y_i) < r * r) {
+                draw_pixel(x_i, y_i);
             }
         }
     }
 }
 
+// draws any not negative number in point (x, y)
 void BMP::draw_number(size_t x, size_t y, int number) {
     std::vector<int> digits;
     if (number == 0) {
@@ -106,9 +111,8 @@ void BMP::draw_number(size_t x, size_t y, int number) {
     std::reverse(digits.begin(), digits.end());
     size_t add = 0;
     for (auto digit : digits) {
-        DigitsDrawer::draw_digit(x, y + add, digit, [this](size_t x, size_t y) {
-            draw_pixel(x, y);
-        });
+        DigitsDrawer::draw_digit(x, y + add, digit,
+                                 [this](size_t x, size_t y) { draw_pixel(x, y); });
         add += 10;
     }
 }

@@ -1,14 +1,18 @@
 #ifndef DIGITSDRAWER_H
 #define DIGITSDRAWER_H
 
-
 #include <cstring>
-#include <string>
 #include <stdexcept>
+#include <string>
 
+/* Class for drawing single digits. Uses functors for drawing pixels,
+ * because of this it can be used for any images classes,
+ * that provide a function for drawing pixel in pos (x, y)
+ */
 class DigitsDrawer {
-public:
-    template<typename T_draw_pixel>
+   public:
+    // throws exception if the specified number is not a digit
+    template <typename T_draw_pixel>
     static void draw_digit(size_t x, size_t y, int digit, T_draw_pixel draw_pixel) {
         switch (digit) {
             case 0:
@@ -42,11 +46,15 @@ public:
                 draw_nine(x, y, draw_pixel);
                 break;
             default:
-                throw std::runtime_error("digit should be in segment [0..9], but provided " + std::to_string(digit));
+                throw std::runtime_error("digit should be in segment [0..9], but provided " +
+                                         std::to_string(digit));
         }
     }
-private:
-    template<typename T_draw_pixel>
+
+   private:
+    // functions for drawing every digit. The style of digits is similar to electronic watch
+
+    template <typename T_draw_pixel>
     static void draw_zero(size_t x, size_t y, T_draw_pixel draw_pixel) noexcept {
         for (int i = 0; i < 6; i++) {
             draw_pixel(x, y + i);
@@ -58,15 +66,15 @@ private:
         }
     }
 
-    template<typename T_draw_pixel>
-    static void draw_one(size_t x, size_t y, T_draw_pixel draw_pixel) noexcept{
+    template <typename T_draw_pixel>
+    static void draw_one(size_t x, size_t y, T_draw_pixel draw_pixel) noexcept {
         for (int i = 0; i < 11; i++) {
             draw_pixel(x + i, y + 2);
         }
     }
 
-    template<typename T_draw_pixel>
-    static void draw_two(size_t x, size_t y, T_draw_pixel draw_pixel) noexcept{
+    template <typename T_draw_pixel>
+    static void draw_two(size_t x, size_t y, T_draw_pixel draw_pixel) noexcept {
         for (int i = 0; i < 6; i++) {
             draw_pixel(x, y + i);
             draw_pixel(x + 5, y + i);
@@ -78,8 +86,8 @@ private:
         }
     }
 
-    template<typename T_draw_pixel>
-    static void draw_three(size_t x, size_t y, T_draw_pixel draw_pixel) noexcept{
+    template <typename T_draw_pixel>
+    static void draw_three(size_t x, size_t y, T_draw_pixel draw_pixel) noexcept {
         for (int i = 0; i < 6; i++) {
             draw_pixel(x, y + i);
             draw_pixel(x + 5, y + i);
@@ -91,8 +99,8 @@ private:
         }
     }
 
-    template<typename T_draw_pixel>
-    static void draw_four(size_t x, size_t y, T_draw_pixel draw_pixel) noexcept{
+    template <typename T_draw_pixel>
+    static void draw_four(size_t x, size_t y, T_draw_pixel draw_pixel) noexcept {
         for (int i = 0; i < 6; i++) {
             draw_pixel(x + 5, y + i);
         }
@@ -105,8 +113,8 @@ private:
         }
     }
 
-    template<typename T_draw_pixel>
-    static void draw_five(size_t x, size_t y, T_draw_pixel draw_pixel) noexcept{
+    template <typename T_draw_pixel>
+    static void draw_five(size_t x, size_t y, T_draw_pixel draw_pixel) noexcept {
         for (int i = 0; i < 6; i++) {
             draw_pixel(x, y + i);
             draw_pixel(x + 5, y + i);
@@ -118,8 +126,8 @@ private:
         }
     }
 
-    template<typename T_draw_pixel>
-    static void draw_six(size_t x, size_t y, T_draw_pixel draw_pixel) noexcept{
+    template <typename T_draw_pixel>
+    static void draw_six(size_t x, size_t y, T_draw_pixel draw_pixel) noexcept {
         for (int i = 0; i < 6; i++) {
             draw_pixel(x, y + i);
             draw_pixel(x + 5, y + i);
@@ -132,8 +140,8 @@ private:
         }
     }
 
-    template<typename T_draw_pixel>
-    static void draw_seven(size_t x, size_t y, T_draw_pixel draw_pixel) noexcept{
+    template <typename T_draw_pixel>
+    static void draw_seven(size_t x, size_t y, T_draw_pixel draw_pixel) noexcept {
         for (int i = 0; i < 11; i++) {
             draw_pixel(x + i, y + 5);
         }
@@ -142,8 +150,8 @@ private:
         }
     }
 
-    template<typename T_draw_pixel>
-    static void draw_eight(size_t x, size_t y, T_draw_pixel draw_pixel) noexcept{
+    template <typename T_draw_pixel>
+    static void draw_eight(size_t x, size_t y, T_draw_pixel draw_pixel) noexcept {
         for (int i = 0; i < 6; i++) {
             draw_pixel(x, y + i);
             draw_pixel(x + 5, y + i);
@@ -157,7 +165,7 @@ private:
         }
     }
 
-    template<typename T_draw_pixel>
+    template <typename T_draw_pixel>
     static void draw_nine(size_t x, size_t y, T_draw_pixel draw_pixel) noexcept {
         for (int i = 0; i < 6; i++) {
             draw_pixel(x, y + i);
@@ -172,5 +180,4 @@ private:
     }
 };
 
-
-#endif // DIGITSDRAWER_H
+#endif  // DIGITSDRAWER_H

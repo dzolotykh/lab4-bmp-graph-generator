@@ -11,22 +11,26 @@ class BMP {
    public:
     BMP(size_t _width, size_t _height);
 
+    // saves image in specified path
     void save(const std::string& path) const noexcept;
 
     // sets pixel in point (x, y) in color (r, g, b)
     void draw_pixel(size_t x, size_t y, u_char r = 0, u_char g = 0, u_char b = 0) noexcept;
 
-    void draw_circle(int x1, int y1, int r) noexcept;
+    // draws black filled circle in point (x, y) with radius r
+    void draw_circle(int x, int y, int r) noexcept;
 
+    // draws black segment from (x1, y1) to (x2, y2)
     void draw_segment(int x1, int y1, int x2, int y2) noexcept;
 
+    // draws any not negative number in point (x, y)
     void draw_number(size_t x, size_t y, int number);
 
    private:
     std::vector<uint8_t> pixels;
     const size_t width, height;
 
-    size_t get_pos(size_t x, size_t y) const noexcept { return (x * height + y) * 3; }
+    inline size_t get_pos(size_t x, size_t y) const noexcept { return (x * height + y) * 3; }
 
     struct Header {
         std::string encoding_type = "BM";
