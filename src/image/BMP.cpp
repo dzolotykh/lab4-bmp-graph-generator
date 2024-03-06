@@ -100,7 +100,7 @@ void BMP::draw_circle(int x, int y, int r) noexcept {
 }
 
 // draws any not negative number in point (x, y)
-void BMP::draw_number(size_t x, size_t y, int number) {
+void BMP::draw_number(size_t x, size_t y, int number, size_t scale) {
     std::vector<int> digits;
     if (number == 0) {
         digits.push_back(0);
@@ -113,7 +113,7 @@ void BMP::draw_number(size_t x, size_t y, int number) {
     size_t add = 0;
     for (auto digit : digits) {
         DigitsDrawer::draw_digit(x, y + add, digit,
-                                 [this](size_t x, size_t y) { draw_pixel(x, y); });
-        add += 10;
+                                 [this](size_t x, size_t y) { draw_pixel(x, y); }, scale);
+        add += between_digits_offset * scale;
     }
 }

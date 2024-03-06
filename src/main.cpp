@@ -7,12 +7,13 @@
 // function for parsing arguments from command line
 // returns true if all required parameters were specified
 bool parse_arguments(int argc, char* argv[], std::string& input, std::string& output,
-                     size_t& iterations, size_t& width, size_t& height, bool& log) {
+                     size_t& iterations, size_t& width, size_t& height, bool& log, size_t& scale) {
     // default parameters
     width = 4096;
     height = 4096;
     iterations = 1000;
     log = true;
+    scale = 2;
 
     bool have_input = false;
     bool have_output = false;
@@ -45,6 +46,12 @@ bool parse_arguments(int argc, char* argv[], std::string& input, std::string& ou
             continue;
         }
 
+        if (i + 1 < argc && arg == "-scale") {
+            scale = atoi(argv[i + 1]);
+            ++i;
+            continue;
+        }
+
         if (i + 1 < argc && arg == "-iter") {
             iterations = atoi(argv[i + 1]);
             ++i;
@@ -72,7 +79,7 @@ bool parse_arguments(int argc, char* argv[], std::string& input, std::string& ou
 
 // function for drawing graph
 void draw_graph(const std::string& path, const std::vector<Point2D>& positions, const Graph& g,
-                size_t width, size_t height) {
+                size_t width, size_t height, size_t scale) {
     BMP image(width, height);  // create image
     for (auto i : positions) {
         image.draw_circle(static_cast<int>(i.x), static_cast<int>(i.y), 10);  // draws vertex
@@ -91,18 +98,16 @@ void draw_graph(const std::string& path, const std::vector<Point2D>& positions, 
     // draw number of vertex width more than 1 pixel
     for (Graph::vertexT v = 0; v < g.size(); ++v) {
         auto i = positions[v];
-        image.draw_number(static_cast<int>(i.x) + 15, static_cast<int>(i.y), v);
-        image.draw_number(static_cast<int>(i.x) + 15, static_cast<int>(i.y) + 1, v);
-        image.draw_number(static_cast<int>(i.x) + 16, static_cast<int>(i.y), v);
+        image.draw_number(static_cast<int>(i.x) + 15, static_cast<int>(i.y), v, scale);
     }
     image.save(path);
 }
 
 int main(int argc, char* argv[]) {
     std::string input, output;
-    size_t width, height, iter;
+    size_t width, height, iter, scale;
     bool log;
-    if (!parse_arguments(argc, argv, input, output, iter, width, height, log)) {
+    if (!parse_arguments(argc, argv, input, output, iter, width, height, log, scale)) {
         return 0;
     }
 
@@ -120,5 +125,5 @@ int main(int argc, char* argv[]) {
     }
 
     auto pos = f.get_positions();
-    draw_graph(output, pos, g, width, height);
+    draw_graph(output, pos, g, width, height, scale);
 }
