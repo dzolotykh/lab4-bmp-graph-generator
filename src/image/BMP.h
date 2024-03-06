@@ -24,7 +24,7 @@ class BMP {
     void draw_segment(int x1, int y1, int x2, int y2) noexcept;
 
     // draws any not negative number in point (x, y)
-    void draw_number(size_t x, size_t y, int number, size_t scale=2);
+    void draw_number(size_t x, size_t y, int number, size_t scale);
 
    private:
     std::vector<uint8_t> pixels;

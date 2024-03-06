@@ -15,18 +15,18 @@ class DigitsDrawer {
    public:
     // throws exception if the specified number is not a digit
     template <typename T_draw_pixel>
-    static void draw_digit(size_t x, size_t y, int digit, T_draw_pixel draw_pixel) {
+    static void draw_digit(size_t x, size_t y, int digit, T_draw_pixel draw_pixel, size_t scale) {
         if (digit < 0 || digit > 9)
             throw std::runtime_error("digit should be in segment [0..9], but provided " +
                                  std::to_string(digit));
 
 
-        draw_from_file(x, y, "../resources/digits/" + std::to_string(digit) + ".txt", draw_pixel);
+        draw_from_file(x, y, "../resources/digits/" + std::to_string(digit) + ".txt", draw_pixel, scale);
     }
 
    private:
     template <typename T_draw_pixel>
-    static void draw_from_file(size_t x, size_t y, const std::string &filepath, T_draw_pixel draw_pixel, size_t scale = 2) {
+    static void draw_from_file(size_t x, size_t y, const std::string &filepath, T_draw_pixel draw_pixel, size_t scale) {
         std::ifstream f(filepath);
         if (!f.is_open()) {
             throw std::runtime_error("could not open file for drawing with path: " + filepath);
