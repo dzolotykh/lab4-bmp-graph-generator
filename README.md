@@ -4,7 +4,7 @@
 Программу сначала нужно скомпилировать с помощью CMake:
 ```shell
 cd build
-cmake build .
+cmake build ..
 make 
 ```
 Дальше можно запускать файл `lab4_bmp_graph_generator`. Существуют следующие параметры запуска:
