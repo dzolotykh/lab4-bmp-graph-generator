@@ -24,11 +24,13 @@ class BMP {
     void draw_segment(int x1, int y1, int x2, int y2) noexcept;
 
     // draws any not negative number in point (x, y)
-    void draw_number(size_t x, size_t y, int number);
+    void draw_number(size_t x, size_t y, int number, size_t scale=2);
 
    private:
     std::vector<uint8_t> pixels;
     const size_t width, height;
+
+    const size_t between_digits_offset = 10;
 
     inline size_t get_pos(size_t x, size_t y) const noexcept { return (x * height + y) * 3; }
 

@@ -92,8 +92,6 @@ void draw_graph(const std::string& path, const std::vector<Point2D>& positions, 
     for (Graph::vertexT v = 0; v < g.size(); ++v) {
         auto i = positions[v];
         image.draw_number(static_cast<int>(i.x) + 15, static_cast<int>(i.y), v);
-        image.draw_number(static_cast<int>(i.x) + 15, static_cast<int>(i.y) + 1, v);
-        image.draw_number(static_cast<int>(i.x) + 16, static_cast<int>(i.y), v);
     }
     image.save(path);
 }
